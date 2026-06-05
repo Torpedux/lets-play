@@ -1,30 +1,60 @@
 # Let's Play - RESTful API
 
-Cette application est une API RESTful sécurisée développée avec Spring Boot et MongoDB, permettant la gestion d'utilisateurs et de produits e-commerce.
+API RESTful sécurisée développée avec Spring Boot et MongoDB pour la gestion d'utilisateurs et de produits e-commerce.
 
-## 🚀 Lancement du projet
-1. Assurez-vous d'avoir **MongoDB** en cours d'exécution sur le port par défaut (`mongodb://localhost:27017`).
-2. Lancez l'application via votre IDE ou avec Maven : `./mvnw spring-boot:run`
-3. Un utilisateur Administrateur est automatiquement généré au démarrage pour faciliter les tests.
+## 🧩 Technologies utilisées
+* Java avec Spring Boot
+* Spring Web pour les endpoints REST
+* Spring Data MongoDB pour la base de données
+* Spring Security + JWT pour l'authentification et l'autorisation
+* BCrypt pour le hachage des mots de passe
+* Maven pour la compilation et la gestion des dépendances
+
+## 📁 Structure principale
+* `src/main/java` : code source principal
+  * `controller` : endpoints REST
+  * `service` : logique métier
+  * `repository` : accès à MongoDB
+  * `model` : entités et DTO
+  * `security` : configuration JWT et règles de sécurité
+  * `exception` : gestion globale des erreurs
+* `src/main/resources` : configuration de l'application
+
+## 🚀 Comment lancer le projet
+1. Assure-toi que MongoDB est démarré localement sur le port par défaut : `mongodb://localhost:27017`
+2. Ouvre un terminal dans `lets-play/api`
+3. Exécute :
+   * `./mvnw spring-boot:run` sur Linux/macOS
+   * `./mvnw.cmd spring-boot:run` sur Windows
+4. L'API démarre sur `http://localhost:8080`
+
+> Un compte administrateur est généré automatiquement au démarrage pour faciliter les tests.
 
 ## 🔐 Identifiants par défaut (Admin)
-* **Email :** admin@letsplay.com
-* **Mot de passe :** Admin123!
+* **Email :** `admin@letsplay.com`
+* **Mot de passe :** `Admin123!`
 
-## 📡 Endpoints de l'API
-
-### Authentification (Public)
-* `POST /auth/register` : Créer un nouveau compte (Le rôle par défaut est USER).
-* `POST /auth/login` : Se connecter et récupérer le token JWT.
+## 📡 Endpoints disponibles
+### Authentification
+* `POST /auth/register` : créer un nouveau compte (rôle USER par défaut)
+* `POST /auth/login` : se connecter et récupérer un token JWT
 
 ### Produits
-* `GET /products` : Voir tous les produits (Public).
-* `POST /products` : Créer un produit (Authentification requise. Assigne automatiquement l'ID de l'utilisateur connecté).
-* `PUT /products/{id}` : Modifier un produit (Réservé au propriétaire du produit ou à un Admin).
-* `DELETE /products/{id}` : Supprimer un produit (Réservé au propriétaire ou à un Admin).
+* `GET /products` : lister tous les produits (public)
+* `POST /products` : créer un produit (authentification requise)
+* `PUT /products/{id}` : modifier un produit (propriétaire ou admin uniquement)
+* `DELETE /products/{id}` : supprimer un produit (propriétaire ou admin uniquement)
 
 ### Utilisateurs
-* `GET /users` : Voir la liste des utilisateurs (Réservé au rôle Admin).
+* `GET /users` : lister tous les utilisateurs (réservé au rôle ADMIN)
 
-## 🛠️ Architecture
-L'API respecte les standards REST et utilise un `@ControllerAdvice` global pour intercepter les exceptions et garantir que l'application ne renvoie jamais d'erreurs 500 brutes, mais des réponses JSON formatées (400, 401, 403, 404). Les mots de passe sont hachés avec BCrypt.
+## 🛡️ Sécurité et gestion d'erreurs
+* JWT pour sécuriser les routes protégées
+* Rôles `USER` et `ADMIN` pour contrôler l'accès
+* `@ControllerAdvice` global pour renvoyer des réponses JSON cohérentes en cas d'erreur
+* Validation des requêtes et gestion centralisée des exceptions
+
+## 💡 Notes importantes
+* Les produits sont automatiquement liés à l'utilisateur connecté lors de la création
+* Les opérations de mise à jour et de suppression sont vérifiées pour empêcher l'accès non autorisé
+* Le projet est extensible pour ajouter facilement de nouveaux endpoints et fonctionnalités
